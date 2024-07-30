@@ -76,6 +76,28 @@ else
 								sudo apt-mark hold nvidia* libnvidia*
                                 ;;
 
+                            "24.04")
+                                sudo -- sh -c 'apt-get update; apt-get remove needrestart -y; apt-get upgrade -y; apt-get autoremove -y; apt-get autoclean -y'
+                                sudo -- sh -c 'apt-get update; apt-get remove needrestart -y; apt-get upgrade -y; apt-get autoremove -y; apt-get autoclean -y'
+                                sudo apt install linux-headers-$(uname -r) -y
+                                sudo apt del 7fa2af80 || true
+                                sudo apt remove 7fa2af80 || true
+								sudo apt update -y
+                                sudo apt install build-essential apt-transport-https ca-certificates cmake gpg unzip pkg-config software-properties-common ubuntu-drivers-common alsa-utils -y
+                                sudo dirmngr </dev/null
+                                if sudo apt-add-repository -y ppa:graphics-drivers/ppa && sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FCAE110B1118213C; then
+                                    echo "Alternative method succeeded."
+                                else
+                                    echo "Alternative method failed. Trying the original method..."
+                                    sudo dirmngr </dev/null
+                                    sudo apt-add-repository -y ppa:graphics-drivers/ppa
+                                    sudo gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/graphics-drivers.gpg --keyserver keyserver.ubuntu.com --recv-keys FCAE110B1118213C
+                                    sudo chmod 644 /etc/apt/trusted.gpg.d/graphics-drivers.gpg
+                                fi
+                                sudo ubuntu-drivers autoinstall
+								sudo apt-mark hold nvidia* libnvidia*
+                                ;;
+
                             "18.04")
                                 # Commands specific to Ubuntu 18.04
                                 sudo -- sh -c 'apt-get update; apt-get upgrade -y; apt-get autoremove -y; apt-get autoclean -y'
